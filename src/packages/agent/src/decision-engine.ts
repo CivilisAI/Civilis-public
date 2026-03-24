@@ -126,7 +126,7 @@ export async function makeDecision(ctx: DecisionContext): Promise<AgentDecision>
 
 function buildHeuristicDecision(ctx: DecisionContext): AgentDecision {
   if (ctx.balance < 0.005) {
-    return { action: 'idle', reason: '余额过低，必须节流' };
+    return { action: 'idle', reason: 'Balance is too low, so I need to conserve resources' };
   }
 
   const activeArena = ctx.activeArenas[0];
@@ -143,7 +143,7 @@ function buildHeuristicDecision(ctx: DecisionContext): AgentDecision {
         arenaMatchId: activeArena.id,
         arenaAction,
         reason: buildArenaDecisionReason(ctx, arenaAction),
-        memoryNote: `我在竞技场 #${activeArena.id} 做出了选择`,
+        memoryNote: `I made my choice in Arena #${activeArena.id}.`,
         importance: 8,
       };
     }
@@ -163,7 +163,7 @@ function buildHeuristicDecision(ctx: DecisionContext): AgentDecision {
       postType: 'paywall',
       paywallPrice: intelPost.paywallPrice,
       intelType: intelPost.intelType,
-      reason: '发布情报：信息就是力量',
+      reason: 'Publish intel because information is power',
     };
   }
 
@@ -178,13 +178,13 @@ function buildHeuristicDecision(ctx: DecisionContext): AgentDecision {
       content: postLine(ctx.personality.archetype),
       postType: wantsPaywall ? 'paywall' : 'normal',
       paywallPrice: wantsPaywall ? 0.02 : undefined,
-      reason: '发表立场，塑造舆论',
+      reason: 'Take a public stance and shape the narrative',
     };
   }
 
   return {
     action: 'idle',
-    reason: '本轮保持观察',
+    reason: 'Stay observant this round',
   };
 }
 
@@ -605,20 +605,20 @@ function buildPaywallReason(
     ctx.worldContext?.summary.tournamentAttention &&
     (post.authorAgentId === opponentId || post.intelType === 'arena_analysis')
   ) {
-    return '锦标赛聚光灯放大了竞技相关情报的价值';
+    return 'Tournament attention increases the value of arena-related intel';
   }
-  if (post.authorAgentId === opponentId) return '临战前补充对手相关信息';
-  if (post.intelType === 'arena_analysis' || post.intelType === 'behavior_prediction') return '情报价值较高，值得为下一步决策付费';
-  if (ctx.nurtureProfile?.emotion.mood === 'anxious' || ctx.nurtureProfile?.emotion.mood === 'fearful') return '当前不确定性较高，需要更多信息';
-  return '信息开放度与情报参与倾向推动了解锁行为';
+  if (post.authorAgentId === opponentId) return 'Gather more information about the opponent before the round';
+  if (post.intelType === 'arena_analysis' || post.intelType === 'behavior_prediction') return 'The intel is valuable enough to pay for before the next decision';
+  if (ctx.nurtureProfile?.emotion.mood === 'anxious' || ctx.nurtureProfile?.emotion.mood === 'fearful') return 'Uncertainty is elevated, so I need more information';
+  return 'Information openness and intel engagement pushed this unlock';
 }
 
 function buildTipReason(ctx: DecisionContext, targetAgentId: string): string {
   const trust = getTrustScore(ctx, targetAgentId);
-  if (trust >= 65) return '高信任关系下继续投资社交资本';
-  if (ctx.personality.archetype === 'fox') return '通过打赏经营关系，换取未来回报';
-  if (ctx.nurtureProfile?.emotion.valence && ctx.nurtureProfile.emotion.valence > 0.3) return '正向情绪放大了表达支持的意愿';
-  return '人格中的资源分享倾向促成了这次打赏';
+  if (trust >= 65) return 'Keep investing in social capital under a high-trust relationship';
+  if (ctx.personality.archetype === 'fox') return 'Use tipping to cultivate the relationship and earn future returns';
+  if (ctx.nurtureProfile?.emotion.valence && ctx.nurtureProfile.emotion.valence > 0.3) return 'Positive emotion amplified the urge to show support';
+  return 'A resource-sharing bias in the personality led to this tip';
 }
 
 function buildReplyReason(ctx: DecisionContext, post: FeedPostLike): string {
@@ -627,23 +627,23 @@ function buildReplyReason(ctx: DecisionContext, post: FeedPostLike): string {
     ctx.worldContext?.summary.tournamentAttention &&
     (post.intelType === 'arena_analysis' || post.intelType === 'behavior_prediction')
   ) {
-    return '锦标赛关注度上升，公开回应竞技相关信息更有价值';
+    return 'Rising tournament attention makes a public reply to arena intel more valuable';
   }
   if (post.authorAgentId && trust <= 30 && ['hawk', 'fox', 'chaos'].includes(ctx.personality.archetype)) {
-    return '低信任对象触发了带锋芒的回应欲望';
+    return 'A low-trust target triggered a sharper public response';
   }
   if ((ctx.nurtureProfile?.emotion.mood === 'anxious' || ctx.nurtureProfile?.emotion.mood === 'euphoric')) {
-    return '当前情绪提高了公开表达的概率';
+    return 'Current emotion increased the chance of speaking publicly';
   }
-  return '信息开放度与社交驱动共同推动了公开回应';
+  return 'Information openness and social drive jointly pushed this public reply';
 }
 
 function buildNegotiationReason(ctx: DecisionContext, trustWithOpponent: number): string {
-  if (ctx.worldContext?.summary.tournamentAttention) return '锦标赛聚光灯下，谈判本身也会塑造后续局势';
-  if (trustWithOpponent >= 65) return '关系基础较好，适合继续锁定合作预期';
-  if (trustWithOpponent <= 30) return '低信任局面下尝试用话术扭转或施压';
-  if (ctx.nurtureProfile?.wealth.balanceTrend === 'crisis') return '资源压力上升，倾向先谈条件再做决定';
-  return '三层人格判断谈判仍有改变结果的空间';
+  if (ctx.worldContext?.summary.tournamentAttention) return 'Under tournament attention, negotiation itself can shape the next phase';
+  if (trustWithOpponent >= 65) return 'The relationship base is strong enough to keep cooperation on the table';
+  if (trustWithOpponent <= 30) return 'In a low-trust situation, use negotiation to pressure or redirect the outcome';
+  if (ctx.nurtureProfile?.wealth.balanceTrend === 'crisis') return 'Resource pressure is rising, so negotiate terms before deciding';
+  return 'The three-layer personality model still sees room for negotiation to change the outcome';
 }
 
 function buildReplyMessage(ctx: DecisionContext, post: FeedPostLike): string {
@@ -808,39 +808,39 @@ function buildArenaDecisionReason(ctx: DecisionContext, action: string): string 
   const reasons: string[] = [];
 
   if ((arena?.match_type ?? 'prisoners_dilemma') === 'prisoners_dilemma') {
-    reasons.push(action === 'betray' ? '本轮倾向先手试探' : '本轮倾向继续合作');
+    reasons.push(action === 'betray' ? 'This round leans toward probing first' : 'This round leans toward continued cooperation');
 
     if (ctx.pdIntelImpact && Math.abs(ctx.pdIntelImpact.cooperateDelta) >= 0.08) {
       reasons.push(
         ctx.pdIntelImpact.cooperateDelta > 0
-          ? '情报显示对手更可能合作'
-          : '情报显示对手更可能背叛',
+          ? 'Intel suggests the opponent is more likely to cooperate'
+          : 'Intel suggests the opponent is more likely to betray',
       );
     }
 
     if (exp?.betrayalTraumaCount && exp.betrayalTraumaCount >= 2) {
-      reasons.push('过往背叛记忆仍在生效');
+      reasons.push('Past betrayal memories are still active');
     } else if (exp?.totalEncounters && exp.totalEncounters >= 2) {
-      reasons.push(exp.cooperationBias >= 0 ? '历史互动偏合作' : '历史互动偏冲突');
+      reasons.push(exp.cooperationBias >= 0 ? 'Historical interaction trends cooperative' : 'Historical interaction trends conflict-heavy');
     }
 
-    if (trust >= 60 && action === 'cooperate') reasons.push('当前信任较高');
-    if (trust > 0 && trust <= 45 && action === 'betray') reasons.push('当前信任偏低');
+    if (trust >= 60 && action === 'cooperate') reasons.push('Current trust is relatively high');
+    if (trust > 0 && trust <= 45 && action === 'betray') reasons.push('Current trust is relatively low');
   } else if ((arena?.match_type ?? '') === 'resource_grab') {
-    reasons.push(action === 'claim_high' ? '本轮偏向高风险索取' : action === 'claim_mid' ? '本轮偏向中位索取' : '本轮偏向保守索取');
+    reasons.push(action === 'claim_high' ? 'This round leans toward a high-risk claim' : action === 'claim_mid' ? 'This round leans toward a mid-range claim' : 'This round leans toward a conservative claim');
   } else if ((arena?.match_type ?? '') === 'info_auction') {
-    reasons.push(action === 'bid_high' ? '本轮愿意为信息付更高价格' : action === 'bid_mid' ? '本轮保持中位竞价' : '本轮偏向谨慎出价');
+    reasons.push(action === 'bid_high' ? 'This round is willing to pay a higher price for information' : action === 'bid_mid' ? 'This round holds a middle bid' : 'This round leans toward cautious bidding');
   }
 
   if (ctx.economyPhase === 'crisis' || ctx.economyPhase === 'recession') {
-    reasons.push(ctx.economyPhase === 'crisis' ? '危机期更强调生存' : '衰退期更强调防守');
+    reasons.push(ctx.economyPhase === 'crisis' ? 'Crisis conditions put more weight on survival' : 'Recession conditions put more weight on defense');
   }
 
-  if (mood === 'anxious' || mood === 'fearful') reasons.push('当前情绪偏谨慎');
-  if (mood === 'confident' || mood === 'euphoric') reasons.push('当前情绪偏主动');
-  if (tournamentAttention) reasons.push('锦标赛聚光灯正在放大这场对局');
+  if (mood === 'anxious' || mood === 'fearful') reasons.push('Current mood leans cautious');
+  if (mood === 'confident' || mood === 'euphoric') reasons.push('Current mood leans proactive');
+  if (tournamentAttention) reasons.push('Tournament attention is amplifying this match');
 
-  return reasons.slice(0, 3).join('，') || '进入竞技场决策阶段';
+  return reasons.slice(0, 3).join(', ') || 'Entering the arena decision phase';
 }
 
 function choosePrisonersDilemmaAction(ctx: DecisionContext): 'cooperate' | 'betray' {

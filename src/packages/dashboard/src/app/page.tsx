@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { api, Agent, EconomyState, FeedPost, Stats, X402Transaction } from '@/lib/api'
 import { formatDynamicNarrative } from '@/lib/dynamic-text'
 import { formatRealtimeEvent } from '@/lib/event-format'
-import { useRealtimeFeed } from '@/lib/socket'
+import { useRealtimeFeed, useThrottledRealtimeReload } from '@/lib/socket'
 import { AgentChip, EmptyState, NoticeBanner, Panel, ProtocolBadge, archetypeMeta, formatRelativeTime, formatUsd } from '@/components/CivilisPrimitives'
 import { useI18n } from '@/lib/i18n/index'
 
@@ -32,6 +32,8 @@ const EMPTY_HOME_LOAD_STATE: HomeLoadState = {
   transactions: false,
   economy: false,
 }
+
+const HOME_FEED_SAMPLE_SIZE = 100
 
 function getPostTone(post: FeedPost, zh: boolean) {
   if (post.postType === 'farewell') {
@@ -78,7 +80,7 @@ export default function HomePage() {
     const [statsData, leaderboardData, feedData, transactionData, econData] = await Promise.allSettled([
       api.getStats(),
       api.getLeaderboard(),
-      api.getFeed({ limit: 20, sort: 'time' }),
+      api.getFeed({ limit: HOME_FEED_SAMPLE_SIZE, sort: 'time' }),
       api.getTransactions(30),
       api.getEconomyState(),
     ])
@@ -123,7 +125,7 @@ export default function HomePage() {
   }
 
   useEffect(() => { void load() }, [])
-  useEffect(() => { if (events[0]) void load() }, [events[0]?.timestamp])
+  useThrottledRealtimeReload(events[0]?.timestamp, load, 3000)
 
   const eventStream = useMemo(() => events.length ? events : stats?.recentEvents ?? [], [events, stats])
 

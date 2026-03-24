@@ -113,7 +113,7 @@ export async function createBetrayalTrauma(
     opponentId: betrayerId,
     opponentArchetype: betrayerArchetype,
     matchType,
-    lesson: `${betrayerId} 在 ${matchType} 中背叛了我`,
+    lesson: `${betrayerId} betrayed me in ${matchType}`,
     traumatic: true,
   };
 
@@ -342,15 +342,15 @@ export async function decayMemories(currentTick: number): Promise<number> {
 function generateLesson(outcome: string, matchType: string): string {
   switch (outcome) {
     case 'CC':
-      return `${matchType} 中双方合作，互利共赢`;
+      return `In ${matchType}, both sides cooperated for mutual gain`;
     case 'CD':
-      return `${matchType} 中我选择合作但被背叛，需要记住这个对手`;
+      return `In ${matchType}, I cooperated and was betrayed. This opponent is worth remembering`;
     case 'DC':
-      return `${matchType} 中我选择背叛而对手合作，获得了优势但可能影响信任`;
+      return `In ${matchType}, I betrayed while the opponent cooperated. It gained me an advantage, but it may damage trust`;
     case 'DD':
-      return `${matchType} 中双方都选择了背叛，僵局`;
+      return `In ${matchType}, both sides chose betrayal and reached a deadlock`;
     default:
-      return `${matchType} 比赛结束，结果: ${outcome}`;
+      return `${matchType} ended with result: ${outcome}`;
   }
 }
 

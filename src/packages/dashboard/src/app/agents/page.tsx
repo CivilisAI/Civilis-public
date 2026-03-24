@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { api, Agent } from '@/lib/api'
-import { useRealtimeFeed } from '@/lib/socket'
+import { useRealtimeFeed, useThrottledRealtimeReload } from '@/lib/socket'
 import { Panel, archetypeMeta, formatArchetypeMetaLabel, formatUsd } from '@/components/CivilisPrimitives'
 import { useI18n } from '@/lib/i18n/index'
 
@@ -15,7 +15,7 @@ export default function AgentsPage() {
 
   async function load() { setAgents(await api.getLeaderboard()) }
   useEffect(() => { void load() }, [])
-  useEffect(() => { if (events[0]) void load() }, [events[0]?.timestamp])
+  useThrottledRealtimeReload(events[0]?.timestamp, load, 3000)
 
   return (
     <div className="space-y-6">

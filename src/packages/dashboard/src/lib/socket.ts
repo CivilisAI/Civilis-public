@@ -49,3 +49,67 @@ export function useRealtimeFeed(maxEvents: number = 80) {
 
   return { events, connected }
 }
+
+export function useThrottledRealtimeReload(
+  trigger: string | undefined,
+  reload: () => Promise<void> | void,
+  throttleMs: number = 3000,
+) {
+  const reloadRef = useRef(reload)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const inFlightRef = useRef(false)
+  const pendingRef = useRef(false)
+  const lastRunRef = useRef(0)
+
+  useEffect(() => {
+    reloadRef.current = reload
+  }, [reload])
+
+  useEffect(() => {
+    async function run() {
+      inFlightRef.current = true
+      lastRunRef.current = Date.now()
+      try {
+        await reloadRef.current()
+      } finally {
+        inFlightRef.current = false
+        if (pendingRef.current) {
+          pendingRef.current = false
+          schedule()
+        }
+      }
+    }
+
+    function schedule() {
+      if (timerRef.current) return
+      const elapsed = Date.now() - lastRunRef.current
+      const wait = Math.max(0, throttleMs - elapsed)
+      timerRef.current = setTimeout(() => {
+        timerRef.current = null
+        if (inFlightRef.current) {
+          pendingRef.current = true
+          return
+        }
+        void run()
+      }, wait)
+    }
+
+    if (!trigger) return
+
+    const elapsed = Date.now() - lastRunRef.current
+    if (!inFlightRef.current && !timerRef.current && elapsed >= throttleMs) {
+      void run()
+      return
+    }
+
+    pendingRef.current = true
+    schedule()
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+        timerRef.current = null
+      }
+    }
+  }, [trigger, throttleMs])
+}

@@ -227,8 +227,14 @@ export default function GraveyardPage() {
                         <div className="grid gap-3 sm:grid-cols-4">
                           <div className="panel px-3 py-2 text-center">
                             <p className="text-[0.6rem] uppercase text-[var(--text-dim)]">{zh ? '对局记录' : 'BATTLE RECORD'}</p>
-                            <p className="mt-1 font-display text-xl text-[var(--text-primary)]">{analysis.battle.wins}W / {analysis.battle.losses}L</p>
-                            <p className="text-[0.6rem] text-[var(--text-dim)]">{zh ? '合作率' : 'Coop'} {(analysis.battle.coopRate * 100).toFixed(0)}%</p>
+                            <p className="mt-1 font-display text-xl text-[var(--text-primary)]">
+                              {zh
+                                ? `${analysis.battle.wins}胜 / ${analysis.battle.losses}负`
+                                : `${analysis.battle.wins} Wins / ${analysis.battle.losses} Losses`}
+                            </p>
+                            <p className="text-[0.6rem] text-[var(--text-dim)]">
+                              {zh ? '合作率' : 'Cooperation Rate'} {(analysis.battle.coopRate * 100).toFixed(0)}%
+                            </p>
                           </div>
                           <div className="panel px-3 py-2 text-center">
                             <p className="text-[0.6rem] uppercase text-[var(--text-dim)]">{zh ? '财富变化' : 'WEALTH CHANGE'}</p>

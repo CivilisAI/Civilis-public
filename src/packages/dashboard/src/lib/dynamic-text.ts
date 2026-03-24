@@ -29,6 +29,15 @@ function formatAgentHandle(handle: string): string {
   return `${handle.slice(0, 1).toUpperCase()}${handle.slice(1)}`
 }
 
+function formatMatchTypeLabel(matchType: string): string {
+  const labels: Record<string, string> = {
+    prisoners_dilemma: "Prisoner's Dilemma",
+    resource_grab: 'The Commons',
+    info_auction: "The Oracle's Eye",
+  }
+  return labels[matchType] ?? matchType
+}
+
 function extractEnglishFarewell(text: string): string | null {
   const bilingual = text.match(/^\[Farewell\]\s*([\s\S]*?)\n+\s*\[遗言\]/i)
   if (bilingual?.[1]) return bilingual[1].trim()
@@ -62,6 +71,65 @@ function translateArenaIntelTrait(text: string): string {
   return labels[text] ?? text
 }
 
+function translateReasonFragments(text: string): string | null {
+  const replacements: Array<[RegExp, string]> = [
+    [/余额过低，必须节流/g, 'Balance is too low, so I need to conserve resources'],
+    [/发布情报：信息就是力量/g, 'Publish intel because information is power'],
+    [/发表立场，塑造舆论/g, 'Take a public stance and shape the narrative'],
+    [/本轮保持观察/g, 'Stay observant this round'],
+    [/锦标赛聚光灯放大了竞技相关情报的价值/g, 'Tournament attention increases the value of arena-related intel'],
+    [/临战前补充对手相关信息/g, 'Gather more information about the opponent before the round'],
+    [/情报价值较高，值得为下一步决策付费/g, 'The intel is valuable enough to pay for before the next decision'],
+    [/当前不确定性较高，需要更多信息/g, 'Uncertainty is elevated, so I need more information'],
+    [/信息开放度与情报参与倾向推动了解锁行为/g, 'Information openness and intel engagement pushed this unlock'],
+    [/高信任关系下继续投资社交资本/g, 'Keep investing in social capital under a high-trust relationship'],
+    [/通过打赏经营关系，换取未来回报/g, 'Use tipping to cultivate the relationship and earn future returns'],
+    [/正向情绪放大了表达支持的意愿/g, 'Positive emotion amplified the urge to show support'],
+    [/人格中的资源分享倾向促成了这次打赏/g, 'A resource-sharing bias in the personality led to this tip'],
+    [/锦标赛关注度上升，公开回应竞技相关信息更有价值/g, 'Rising tournament attention makes a public reply to arena intel more valuable'],
+    [/低信任对象触发了带锋芒的回应欲望/g, 'A low-trust target triggered a sharper public response'],
+    [/当前情绪提高了公开表达的概率/g, 'Current emotion increased the chance of speaking publicly'],
+    [/信息开放度与社交驱动共同推动了公开回应/g, 'Information openness and social drive jointly pushed this public reply'],
+    [/锦标赛聚光灯下，谈判本身也会塑造后续局势/g, 'Under tournament attention, negotiation itself can shape the next phase'],
+    [/关系基础较好，适合继续锁定合作预期/g, 'The relationship base is strong enough to keep cooperation on the table'],
+    [/低信任局面下尝试用话术扭转或施压/g, 'In a low-trust situation, use negotiation to pressure or redirect the outcome'],
+    [/资源压力上升，倾向先谈条件再做决定/g, 'Resource pressure is rising, so negotiate terms before deciding'],
+    [/三层人格判断谈判仍有改变结果的空间/g, 'The three-layer personality model still sees room for negotiation to change the outcome'],
+    [/本轮倾向先手试探/g, 'This round leans toward probing first'],
+    [/本轮倾向继续合作/g, 'This round leans toward continued cooperation'],
+    [/情报显示对手更可能合作/g, 'Intel suggests the opponent is more likely to cooperate'],
+    [/情报显示对手更可能背叛/g, 'Intel suggests the opponent is more likely to betray'],
+    [/过往背叛记忆仍在生效/g, 'Past betrayal memories are still active'],
+    [/历史互动偏合作/g, 'Historical interaction trends cooperative'],
+    [/历史互动偏冲突/g, 'Historical interaction trends conflict-heavy'],
+    [/当前信任较高/g, 'Current trust is relatively high'],
+    [/当前信任偏低/g, 'Current trust is relatively low'],
+    [/本轮偏向高风险索取/g, 'This round leans toward a high-risk claim'],
+    [/本轮偏向中位索取/g, 'This round leans toward a mid-range claim'],
+    [/本轮偏向保守索取/g, 'This round leans toward a conservative claim'],
+    [/本轮愿意为信息付更高价格/g, 'This round is willing to pay a higher price for information'],
+    [/本轮保持中位竞价/g, 'This round holds a middle bid'],
+    [/本轮偏向谨慎出价/g, 'This round leans toward cautious bidding'],
+    [/危机期更强调生存/g, 'Crisis conditions put more weight on survival'],
+    [/衰退期更强调防守/g, 'Recession conditions put more weight on defense'],
+    [/当前情绪偏谨慎/g, 'Current mood leans cautious'],
+    [/当前情绪偏主动/g, 'Current mood leans proactive'],
+    [/锦标赛聚光灯正在放大这场对局/g, 'Tournament attention is amplifying this match'],
+    [/进入竞技场决策阶段/g, 'Entering the arena decision phase'],
+  ]
+
+  let translated = text
+  for (const [pattern, replacement] of replacements) {
+    translated = translated.replace(pattern, replacement)
+  }
+
+  if (translated !== text) {
+    return translated.replace(/，/g, ', ')
+  }
+
+  return null
+}
+
 function translateStructuredLine(text: string): string | null {
   const arenaRound = text.match(/^竞技场 vs ([\w-]+) \(第(\d+)轮(·最终轮)?\): 我选择(.+?)，对方选择(.+?)，本轮获得 ([\d.]+) USDT$/)
   if (arenaRound) {
@@ -72,6 +140,42 @@ function translateStructuredLine(text: string): string | null {
   const betrayedBy = text.match(/^([A-Za-z_][\w-]*) 在 prisoners_dilemma 中背叛了我$/)
   if (betrayedBy) {
     return `${betrayedBy[1]} betrayed me in Prisoner's Dilemma.`
+  }
+
+  const betrayalMemory = text.match(/^([A-Za-z_][\w-]*) 在 ([\w-]+) 中背叛了我$/)
+  if (betrayalMemory) {
+    const [, betrayer, matchType] = betrayalMemory
+    return `${formatAgentHandle(betrayer)} betrayed me in ${formatMatchTypeLabel(matchType)}.`
+  }
+
+  const arenaChoiceMemory = text.match(/^我在竞技场 #(\d+) 做出了选择$/)
+  if (arenaChoiceMemory) {
+    return `I made my choice in Arena #${arenaChoiceMemory[1]}.`
+  }
+
+  const mutualCoop = text.match(/^([\w-]+) 中双方合作，互利共赢$/)
+  if (mutualCoop) {
+    return `In ${formatMatchTypeLabel(mutualCoop[1])}, both sides cooperated for mutual gain.`
+  }
+
+  const coopBetrayed = text.match(/^([\w-]+) 中我选择合作但被背叛，需要记住这个对手$/)
+  if (coopBetrayed) {
+    return `In ${formatMatchTypeLabel(coopBetrayed[1])}, I cooperated and was betrayed. This opponent is worth remembering.`
+  }
+
+  const betrayAdvantage = text.match(/^([\w-]+) 中我选择背叛而对手合作，获得了优势但可能影响信任$/)
+  if (betrayAdvantage) {
+    return `In ${formatMatchTypeLabel(betrayAdvantage[1])}, I betrayed while the opponent cooperated. It gained me an advantage, but it may damage trust.`
+  }
+
+  const mutualBetray = text.match(/^([\w-]+) 中双方都选择了背叛，僵局$/)
+  if (mutualBetray) {
+    return `In ${formatMatchTypeLabel(mutualBetray[1])}, both sides chose betrayal and reached a deadlock.`
+  }
+
+  const matchEnded = text.match(/^([\w-]+) 比赛结束，结果: (.+)$/)
+  if (matchEnded) {
+    return `${formatMatchTypeLabel(matchEnded[1])} ended with result: ${matchEnded[2]}.`
   }
 
   const paywallPrediction = text.match(/^🔒 \[行为预测\] 基于过去所有轮次的模式分析，我预测下轮合作率将(上升|下降)。详细推演过程付费查看。$/)
@@ -424,6 +528,9 @@ export function formatDynamicNarrative(text: string | null | undefined, zh: bool
   const structured = translateStructuredLine(normalized)
   if (structured) return structured
 
+  const fragmentTranslated = translateReasonFragments(normalized)
+  if (fragmentTranslated) return fragmentTranslated
+
   const exactMap: Record<string, string> = {
     '市场崩盘': 'Market Crash',
     '黑天鹅事件导致市场暴跌，所有 Agent 资产缩水': 'A black swan shock sent the market sharply lower and shrank every agent’s assets.',
@@ -505,7 +612,9 @@ export function formatDynamicNarrative(text: string | null | undefined, zh: bool
     '🔒 [深度分析] 竞技场对局趋势出现微妙转向。完整解读需解锁查看。': '🔒 [Deep Dive] The arena trend has shifted in a subtle new direction. Unlock to read the full analysis.',
     '🔒 [深度解析] 竞技场近期对局格局正悄然生变。完整趋势研判需解锁查阅。': '🔒 [Deep Dive] The recent arena structure is quietly changing. Unlock to read the full trend assessment.',
     'prisoners_dilemma 中双方都选择了背叛，僵局': 'In Prisoner’s Dilemma, both sides chose betrayal and reached a deadlock.',
+    'prisoners_dilemma 中双方合作，互利共赢': 'In Prisoner’s Dilemma, both sides cooperated for mutual gain.',
     'prisoners_dilemma 中我选择合作但被背叛，需要记住这个对手': 'In Prisoner’s Dilemma, I cooperated and was betrayed. This opponent is worth remembering.',
+    'prisoners_dilemma 中我选择背叛而对手合作，获得了优势但可能影响信任': 'In Prisoner’s Dilemma, I betrayed while the opponent cooperated. It gave me an advantage, but it may damage trust.',
     'Chaos: sage，也许你对，也许宇宙在开玩笑。': 'Chaos: Sage, maybe you are right, or maybe the universe is just joking.',
     '你的余额就是你的选票。': 'Your balance is your ballot.',
     '今天的爆款话题，转眼就能织成新的社交脉络。': 'Today’s breakout topic can become tomorrow’s social wiring in an instant.',

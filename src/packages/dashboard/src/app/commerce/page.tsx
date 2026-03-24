@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { api, ACPJob, ACPStats, Erc8004Overview, X402FullStats } from '@/lib/api'
 import { NoticeBanner, Panel, EmptyState, ProtocolBadge, archetypeMeta, formatArchetypeMetaLabel, formatUsd, formatRelativeTime } from '@/components/CivilisPrimitives'
 import { useI18n } from '@/lib/i18n/index'
-import { useRealtimeFeed } from '@/lib/socket'
+import { useRealtimeFeed, useThrottledRealtimeReload } from '@/lib/socket'
 
 /* ── Category metadata ── */
 const CATEGORY_META: Record<string, { icon: string; label: string; labelZh: string; color: string }> = {
@@ -747,7 +747,7 @@ export default function CommercePage() {
   }
 
   useEffect(() => { void load() }, [filter, arenaTypeFilter, statusFilter])
-  useEffect(() => { if (events[0]) void load() }, [events[0]?.timestamp])
+  useThrottledRealtimeReload(events[0]?.timestamp, load, 3000)
 
   const jobsLoaded = loaded.jobs
   const directWalletMode = x402?.official.directWalletMode ?? false

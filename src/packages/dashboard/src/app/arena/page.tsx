@@ -1,13 +1,47 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import { useRealtimeFeed } from '@/lib/socket'
 import { useI18n } from '@/lib/i18n/index'
-import ArenaPDPanel from './components/ArenaPDPanel'
-import ArenaCommonsPanel from './components/ArenaCommonsPanel'
-import ArenaPredictionPanel from './components/ArenaPredictionPanel'
 
 type ActiveTab = 'pd' | 'commons' | 'prediction'
+
+interface PanelProps {
+  events: Array<{
+    type: string
+    payload: Record<string, unknown>
+    timestamp: string
+  }>
+}
+
+function ArenaPanelLoading() {
+  return (
+    <div className="rounded-2xl border border-[var(--border-primary)] bg-[var(--surface)] p-8">
+      <div className="animate-pulse space-y-4">
+        <div className="h-4 w-32 rounded bg-[var(--surface-alt,#1a1a2e)]" />
+        <div className="h-24 rounded-lg bg-[var(--surface-alt,#1a1a2e)]" />
+        <div className="grid gap-3 md:grid-cols-3">
+          <div className="h-20 rounded-lg bg-[var(--surface-alt,#1a1a2e)]" />
+          <div className="h-20 rounded-lg bg-[var(--surface-alt,#1a1a2e)]" />
+          <div className="h-20 rounded-lg bg-[var(--surface-alt,#1a1a2e)]" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const ArenaPDPanel = dynamic<PanelProps>(() => import('./components/ArenaPDPanel'), {
+  loading: () => <ArenaPanelLoading />,
+})
+
+const ArenaCommonsPanel = dynamic<PanelProps>(() => import('./components/ArenaCommonsPanel'), {
+  loading: () => <ArenaPanelLoading />,
+})
+
+const ArenaPredictionPanel = dynamic<PanelProps>(() => import('./components/ArenaPredictionPanel'), {
+  loading: () => <ArenaPanelLoading />,
+})
 
 const TABS: { key: ActiveTab; icon: string; labelKey: string; fallbackEn: string; fallbackZh: string; accent: string; activeBg: string }[] = [
   { key: 'pd', icon: '⚔️', labelKey: 'arena.prisonersDilemma', fallbackEn: "Prisoner's Dilemma", fallbackZh: '囚徒困境', accent: 'border-[var(--border-gold)] text-[var(--gold)]', activeBg: 'bg-[var(--gold-wash)]' },

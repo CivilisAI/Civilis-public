@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { api, Agent, ArenaMatch, EconomyState, TickSnapshot, TrustRelation, WorldAnalyticsSummary, WorldEvent, WorldModifier, WorldOverview, WorldSignal, WorldTickRun, X402Transaction } from '@/lib/api'
-import { useRealtimeFeed } from '@/lib/socket'
+import { useRealtimeFeed, useThrottledRealtimeReload } from '@/lib/socket'
 import { EmptyState, NoticeBanner, Panel, archetypeMeta, formatRelativeTime, formatUsd } from '@/components/CivilisPrimitives'
 import { formatDynamicNarrative } from '@/lib/dynamic-text'
 import { useI18n } from '@/lib/i18n/index'
@@ -725,7 +725,7 @@ export default function WorldPage() {
   }
 
   useEffect(() => { void load() }, [])
-  useEffect(() => { if (live[0]) void load() }, [live[0]?.timestamp])
+  useThrottledRealtimeReload(live[0]?.timestamp, load, 4000)
 
   const aliveCount = agents.filter((a: any) => a.is_alive !== false).length
   const totalCount = agents.length

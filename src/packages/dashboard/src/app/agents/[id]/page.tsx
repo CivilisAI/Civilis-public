@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { api, Agent, AgentCommerceSummary, AgentDecisionTrace, AgentReputationViewResponse, AgentValidationViewResponse, AgentWorldContext, AgentWorldExposure, ArenaMatch, FeedPost, TrustRelation, X402Transaction, FateKnowledgeMap, IntelCreditScoreRow, PredictionAgentStats } from '@/lib/api'
-import { useRealtimeFeed } from '@/lib/socket'
+import { useRealtimeFeed, useThrottledRealtimeReload } from '@/lib/socket'
 import { EmptyState, NoticeBanner, Panel, AgentChip, archetypeMeta, formatRelativeTime, formatShortDate, formatUsd } from '@/components/CivilisPrimitives'
 import { useI18n } from '@/lib/i18n/index'
 import { formatDynamicNarrative } from '@/lib/dynamic-text'
@@ -860,7 +860,7 @@ export default function AgentDetailPage() {
       setInitialLoadDone(true)
     })
   }, [agentId, zh])
-  useEffect(() => { if (events[0]) void load() }, [events[0]?.timestamp])
+  useThrottledRealtimeReload(events[0]?.timestamp, load, 4000)
 
   if (!agent && !initialLoadDone) return <div className="panel">{t('common.loading')}</div>
   if (!agent) {
@@ -2067,7 +2067,9 @@ export default function AgentDetailPage() {
                     </span>
                   </div>
                   <p className="text-sm text-[var(--text-secondary)]">
-                    {trace.reason_summary || (zh ? '这次动作没有额外解释。' : 'No extra rationale was stored for this action.')}
+                    {trace.reason_summary
+                      ? formatDynamicNarrative(trace.reason_summary, zh)
+                      : (zh ? '这次动作没有额外解释。' : 'No extra rationale was stored for this action.')}
                   </p>
                 </div>
                 <div className="text-left lg:text-right">
