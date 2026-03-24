@@ -35,6 +35,8 @@ specs/
 docs/**
 !docs/public/
 !docs/public/*.md
+!docs/public/assets/
+!docs/public/assets/*
 src/docs/
 src/DEPLOY_GUIDE.md
 .local-submission/
