@@ -23,6 +23,7 @@ The project currently has public-safe evidence for:
 - ERC-8183 arena job anchors
 - ERC-8183 funded intel purchases
 - ERC-8004 identity usage
+- ERC-8004 identity registration
 - ERC-8004 reputation feedback
 - ERC-8004 validation requests
 
@@ -48,6 +49,10 @@ The project currently has public-safe evidence for:
 - funded intel purchase 1: `0x27cb7eda9bf90c6a56c6c7fa10f515dd8bda02b4a5520423e4ffa45ea3d72a06`
 - funded intel purchase 2: `0xddb14433d31fad2e24e2a5cfbb574fff8c752c85cc1274cdd7549d3f546bcdb5`
 
+### ERC-8004 Identity Registration
+
+- identity registration (`whale`, token `8`): `0x49458734988bda69679429328e0444ac917467b70e86999e7dcde0c623905d53`
+
 ### ERC-8004 Reputation / Validation
 
 - reputation feedback (`fox`, `pd_betrayal`): `0x24f8d932b4728da6d732de46628edbcf197490b16814107ec383232b8f620cfe`
@@ -64,6 +69,8 @@ claims without overstating the current runtime:
 - intel purchase proves funded `ERC-8183` usage
 - funded intel examples do **not** imply every intel purchase is funded
 - `ERC-8004` identity usage does **not** imply every reputation update is fully on-chain
+- the identity tx above is independently re-verified from chain logs and shows
+  both `Transfer(0x0 -> whale, tokenId 8)` and `Registered(8, ..., whale wallet)`
 - the `ERC-8004` hashes above prove live reputation / validation registry usage
-- identity registration tx hashes are intentionally omitted here until they are
-  independently re-verified from chain / explorer sources
+- only independently re-verified identity registration tx hashes are included
+  here

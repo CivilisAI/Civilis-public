@@ -102,6 +102,10 @@ Use these hashes as the primary public-safe evidence set.
 - funded intel purchase: `0x27cb7eda9bf90c6a56c6c7fa10f515dd8bda02b4a5520423e4ffa45ea3d72a06`
 - funded intel purchase: `0xddb14433d31fad2e24e2a5cfbb574fff8c752c85cc1274cdd7549d3f546bcdb5`
 
+### ERC-8004 Identity Registration
+
+- identity registration (`whale`, token `8`): `0x49458734988bda69679429328e0444ac917467b70e86999e7dcde0c623905d53`
+
 ### ERC-8004 Reputation / Validation
 
 - reputation feedback (`fox`, `pd_betrayal`): `0x24f8d932b4728da6d732de46628edbcf197490b16814107ec383232b8f620cfe`
@@ -117,14 +121,14 @@ Use these hashes as the primary public-safe evidence set.
   - verified funded `ERC-8183` flows
 - `ERC-8004` currently proves:
   - mainnet identity registry usage through the live token mapping shown above
+  - an independently re-verified identity registration tx for `whale` / token `8`
   - concrete reputation / validation writes through the hashes above
 - not every intel purchase is currently funded
 - arena is not currently presented as fully funded ERC-8183 escrow
 - ERC-8004 identity is on mainnet, but reputation remains mixed between
   on-chain-verifiable updates and local civilization-ledger state
-- identity registration tx hashes are intentionally excluded from the canonical
-  shortlist until they are independently re-verified from chain / explorer
-  sources at the same standard as the hashes above
+- only independently re-verified identity registration tx hashes are included
+  in the canonical shortlist
 
 ## Recommended Submission Fields
 

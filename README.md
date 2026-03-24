@@ -44,7 +44,7 @@ If you only have a minute, verify Civilis in this order:
    is fully live today, what is mixed, and what is intentionally not claimed.
 
 The immutable submission snapshot for this public repository is tagged as
-`submission-2026-03-24-r2`.
+`submission-2026-03-24-r3`.
 
 ## System Overview
 
