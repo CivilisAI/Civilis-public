@@ -30,6 +30,8 @@ This repository contains the full project source code used at submission time.
 Only secrets, private notes, internal operating materials, and local demo-only
 overlays are excluded from the public snapshot.
 
+Demo video: [YouTube](https://youtu.be/AxVqIehVh1U)
+
 ## Judge Quick Path
 
 If you only have a minute, verify Civilis in this order:
