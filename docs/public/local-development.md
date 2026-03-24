@@ -19,6 +19,11 @@ docker compose up -d postgres
 pnpm build
 ```
 
+For local compile / build / contract test flows, the public `.env.example`
+intentionally leaves deployment private keys blank. That is expected. Fill
+private keys only in your own private env file when you are testing deployment
+or funded on-chain write paths.
+
 ## Run
 
 Open three terminals inside `src/`:
