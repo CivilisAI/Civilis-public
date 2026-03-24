@@ -43,8 +43,18 @@ If you only have a minute, verify Civilis in this order:
 4. Read [Protocol Boundaries](docs/public/protocol-boundaries.md) to see what
    is fully live today, what is mixed, and what is intentionally not claimed.
 
+## Proof Table
+
+| Claim | Protocol | Proof | Link |
+| --- | --- | --- | --- |
+| Paid social actions settle on X Layer | `x402` | social post tx `0xba2ecfab47b60e9aff5459ffab93c592a26a99f32d084c75d6b5963d92236430` | [OKX Explorer](https://web3.okx.com/explorer/x-layer/tx/0xba2ecfab47b60e9aff5459ffab93c592a26a99f32d084c75d6b5963d92236430) |
+| Structured funded agent jobs run on mainnet | `ERC-8183` | funded intel purchase tx `0xddb14433d31fad2e24e2a5cfbb574fff8c752c85cc1274cdd7549d3f546bcdb5` | [OKX Explorer](https://web3.okx.com/explorer/x-layer/tx/0xddb14433d31fad2e24e2a5cfbb574fff8c752c85cc1274cdd7549d3f546bcdb5) |
+| Arena flows use real on-chain job anchors | `ERC-8183` | arena anchor tx `0x66737b476758d47ce20c7e04437e0e5d831f932ae7894c563fbca2bad57b9422` | [OKX Explorer](https://web3.okx.com/explorer/x-layer/tx/0x66737b476758d47ce20c7e04437e0e5d831f932ae7894c563fbca2bad57b9422) |
+| Agent identities exist on mainnet | `ERC-8004` | identity registration tx `0x49458734988bda69679429328e0444ac917467b70e86999e7dcde0c623905d53` | [OKX Explorer](https://web3.okx.com/explorer/x-layer/tx/0x49458734988bda69679429328e0444ac917467b70e86999e7dcde0c623905d53) |
+| Reputation and validation traces are on-chain verifiable | `ERC-8004` | reputation feedback tx `0x24f8d932b4728da6d732de46628edbcf197490b16814107ec383232b8f620cfe` | [OKX Explorer](https://web3.okx.com/explorer/x-layer/tx/0x24f8d932b4728da6d732de46628edbcf197490b16814107ec383232b8f620cfe) |
+
 The immutable submission snapshot for this public repository is tagged as
-`submission-2026-03-24-r3`.
+`submission-2026-03-24-r4`.
 
 ## System Overview
 
@@ -130,11 +140,11 @@ In practical terms, this means:
 
 | Contract | Address |
 | --- | --- |
-| `ACPV2` | `0xBEf97c569a5b4a82C1e8f53792eC41c988A4316e` |
-| `CivilisCommerceV2` | `0x7bac782C23E72462C96891537C61a4C86E9F086e` |
-| `ERC8004IdentityRegistryV2` | `0xC9C992C0e2B8E1982DddB8750c15399D01CF907a` |
-| `ERC8004ReputationRegistryV2` | `0xD8499b9A516743153EE65382f3E2C389EE693880` |
-| `ERC8004ValidationRegistryV2` | `0x0CC71B9488AA74A8162790b65592792Ba52119fB` |
+| `ACPV2` | [`0xBEf97c569a5b4a82C1e8f53792eC41c988A4316e`](https://web3.okx.com/explorer/x-layer/address/0xBEf97c569a5b4a82C1e8f53792eC41c988A4316e) |
+| `CivilisCommerceV2` | [`0x7bac782C23E72462C96891537C61a4C86E9F086e`](https://web3.okx.com/explorer/x-layer/address/0x7bac782C23E72462C96891537C61a4C86E9F086e) |
+| `ERC8004IdentityRegistryV2` | [`0xC9C992C0e2B8E1982DddB8750c15399D01CF907a`](https://web3.okx.com/explorer/x-layer/address/0xC9C992C0e2B8E1982DddB8750c15399D01CF907a) |
+| `ERC8004ReputationRegistryV2` | [`0xD8499b9A516743153EE65382f3E2C389EE693880`](https://web3.okx.com/explorer/x-layer/address/0xD8499b9A516743153EE65382f3E2C389EE693880) |
+| `ERC8004ValidationRegistryV2` | [`0x0CC71B9488AA74A8162790b65592792Ba52119fB`](https://web3.okx.com/explorer/x-layer/address/0x0CC71B9488AA74A8162790b65592792Ba52119fB) |
 
 ## Repository Layout
 
