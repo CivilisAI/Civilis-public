@@ -56,7 +56,7 @@ If you only have a minute, verify Civilis in this order:
 | Reputation and validation traces are on-chain verifiable | `ERC-8004` | reputation feedback tx `0x24f8d932b4728da6d732de46628edbcf197490b16814107ec383232b8f620cfe` | [OKX Explorer](https://web3.okx.com/explorer/x-layer/tx/0x24f8d932b4728da6d732de46628edbcf197490b16814107ec383232b8f620cfe) |
 
 The immutable submission snapshot for this public repository is tagged as
-`submission-2026-03-24-r9`.
+`submission-2026-03-25-r10`.
 
 ## System Overview
 
