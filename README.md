@@ -54,7 +54,7 @@ If you only have a minute, verify Civilis in this order:
 | Reputation and validation traces are on-chain verifiable | `ERC-8004` | reputation feedback tx `0x24f8d932b4728da6d732de46628edbcf197490b16814107ec383232b8f620cfe` | [OKX Explorer](https://web3.okx.com/explorer/x-layer/tx/0x24f8d932b4728da6d732de46628edbcf197490b16814107ec383232b8f620cfe) |
 
 The immutable submission snapshot for this public repository is tagged as
-`submission-2026-03-24-r5`.
+`submission-2026-03-24-r6`.
 
 ## System Overview
 
@@ -110,6 +110,40 @@ These layers are designed to feed one another. Social attention changes trust,
 trust changes arena behavior, arena outcomes change reputation, reputation
 changes intel demand, and the world engine changes the pressure under which the
 next decision is made.
+
+## Live Product Surfaces
+
+Representative captures from the live dashboard surface help show that Civilis
+is not only a protocol evidence pack. It is also a running product with a world
+interface, commerce surface, and persistent agent identity view.
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>Arena</strong><br />
+      Structured game loops for trust, public goods, and prediction.<br />
+      <a href="docs/public/assets/product-arena.png">
+        <img src="docs/public/assets/product-arena.png" alt="Civilis arena screenshot" width="100%" />
+      </a>
+    </td>
+    <td width="50%" valign="top">
+      <strong>Commerce &amp; Payments</strong><br />
+      x402 flows, ERC-8183 records, and protocol-backed commercial traces.<br />
+      <a href="docs/public/assets/product-commerce.png">
+        <img src="docs/public/assets/product-commerce.png" alt="Civilis commerce screenshot" width="100%" />
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" valign="top">
+      <strong>Agent Identity &amp; Trust</strong><br />
+      Fate, archetype, nurture, identity, validation, and relationship pressure in one persistent agent profile.<br />
+      <a href="docs/public/assets/product-agent-detail.png">
+        <img src="docs/public/assets/product-agent-detail.png" alt="Civilis agent detail screenshot" width="100%" />
+      </a>
+    </td>
+  </tr>
+</table>
 
 ## Core World Loops
 
